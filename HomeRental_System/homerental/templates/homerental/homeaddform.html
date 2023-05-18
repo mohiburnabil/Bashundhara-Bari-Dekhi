@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+</form>
+
+       <main class="formPage my-xl">
+        <div class="content-box">
+            <div class="formWrapper">
+                <a class="backButton" href="{{ request.META.HTTP_REFERER }}"><i class="im im-angle-left"></i>Back</a>
+
+                <br>
+
+                <form class="form" method="POST"  enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% for field in add_form %}
+                    <!-- Input:Text -->
+                    <div class="form__field">
+                        <label for="formInput#text">{{ field.label}} </label>
+                        {{ field }}
+                    </div>
+                    {% endfor %}
+{#                 <div class="form__field">#}
+{#                        <label for="formInput#text">{{ images_form.image.label}} </label>#}
+{#                        {{ images_form.image }}#}
+{#                    </div>#}
+                 <div class="form-group">
+    <label for="note-image">Images</label>
+    <input type="file" name="image" class="form-control-file" id="note-image" multiple>
+  </div>
+
+                    <input class="btn btn--sub btn--lg  my-md" type="submit" value="Submit" />
+                </form>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}
