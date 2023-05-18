@@ -101,3 +101,41 @@ def user_account(request):
     user = request.user
     context = {'user': user}
     return render(request, 'homerental/account.html', context)
+
+@login_required(login_url='user_login')
+def update_profile(request):
+    profile = request.user.profile
+
+    if request.method == 'POST':
+        profile_form = forms.UserUpdateForm(request.POST, request.FILES, instance=profile)
+        if profile_form.is_valid():
+            profile_form.save()
+            messages.success(request, 'profile updated successfully')
+            return redirect('user_account')
+
+    profile_form = forms.UserUpdateForm(instance=profile)
+    context = {'profile_form': profile_form}
+    return render(request, 'homerental/update_profile.html', context)
+
+@login_required(login_url='user_login')
+def create_homeAdd(request):
+    homeadd_form = None
+    if request.method == 'POST':
+
+        homeadd_form = forms.HomeAddForm(request.POST, request.FILES)
+        if homeadd_form.is_valid():
+            add = homeadd_form.save(commit=False)
+            add.home_owner = request.user.profile.homeowner
+            homeadd_form.save()
+            messages.success(request, 'Home add added successfully')
+            images = request.FILES.getlist('image')
+            for image in images:
+                models.HomeImages.objects.create(home=add,image=image)
+
+
+            return redirect('user_account')
+
+    add_form = forms.HomeAddForm()
+    images_form = forms.ImageForm()
+    context = {'add_form': add_form,'images_form':images_form}
+    return render(request, 'homerental/homeaddform.html', context)
