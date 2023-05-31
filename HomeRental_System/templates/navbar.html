@@ -6,6 +6,11 @@
 {#      <a href="{% url 'home' %}" class="header__logo">#}
 {#         <img src="{% static  'images/logo.png' %}" >#}
 {#      </a>#}
+   {% if request.user.profile.renter %}
+    <h4 style="color: #e6faff">Hello Renter</h4>
+    {% elif request.user.profile.homeowner %}
+    <h4 style="color: #e6faff">Hello Home Owner</h4>
+    {% endif %}
 {#      <nav class="header__nav">#}
 {#        <input type="checkbox" id="responsive-menu" />#}
 {#        <label for="responsive-menu" class="toggle-menu">#}
