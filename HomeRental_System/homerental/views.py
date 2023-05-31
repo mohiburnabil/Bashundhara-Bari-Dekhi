@@ -13,7 +13,28 @@ from . import forms
 
 
 def home(request):
-    return  render(request,'homerental/adds.html')
+       q = ''
+    if request.GET.get('q'):
+        q = request.GET.get('q')
+    # if request.GET.get('max'):
+    #     print('maxx:', request.GET.get('max'))
+    all_adds = models.HomeAdd.objects.distinct().filter(
+        Q(block_name__icontains=q) | Q(road_num__icontains=q) | Q(house_type__iexact=q))
+    max = 1000000
+    min = 0
+    if request.GET.get('max'):
+        max = request.GET.get('max')
+        print(max)
+    if request.GET.get('min'):
+        min = request.GET.get('min')
+        print(min)
+    try:
+        all_adds = all_adds.filter(rent_ammount__lte=max, rent_ammount__gte=min)
+        print(all_adds)
+    except:
+        pass
+    return render(request, 'homerental/adds.html', {'title': 'home page', 'adds': all_adds})
+
 
 
 # Create your views here.
