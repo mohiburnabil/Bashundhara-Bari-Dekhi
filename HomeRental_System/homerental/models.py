@@ -72,8 +72,20 @@ class Message(models.Model):
     class Meta:
         ordering = ['is_read', '-created']
 
-
 class Complain(models.Model):
-    complainer = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True,related_name='complainer')
-    complainee = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True,related_name='complainee')
+    complainer = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True, related_name='complainer')
+    complainee = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True, related_name='complainee')
     complain = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+
+class AddNoticifation(models.Model):
+    renter = models.ForeignKey(Renter, on_delete=models.CASCADE, related_name='notific')
+    block_name = models.CharField(max_length=1, null=False)
+    road_number = models.IntegerField(null=True, blank=True, default=0)
+    maximum_rent_ammount = models.FloatField(default=0)
+    created = models.DateTimeField(auto_now_add=True,null=True)
+    class Meta:
+        ordering = ['-created']
+
